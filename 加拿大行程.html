@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>加拿大行程 2026/9/18–9/27</title>
+<style>
+  :root {
+    --bg: #f4f6f8;
+    --card: #ffffff;
+    --ink: #1f2933;
+    --sub: #52606d;
+    --line: #e1e6eb;
+    --brand: #b8322f;      /* 楓葉紅 */
+    --brand-soft: #fbe9e8;
+    --blue: #1d6fb8;
+    --blue-soft: #e6f0f9;
+    --green: #227a3b;
+    --green-soft: #e4f3e8;
+    --amber: #a56a00;
+    --amber-soft: #fdf1d8;
+    --radius: 14px;
+  }
+  * { box-sizing: border-box; -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    font-family: -apple-system, "PingFang TC", "Helvetica Neue", "Microsoft JhengHei", sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.65;
+    font-size: 17px;
+  }
+  .wrap { max-width: 820px; margin: 0 auto; padding: 16px; }
+
+  header.hero {
+    background: linear-gradient(135deg, #b8322f, #8f1f1d);
+    color: #fff;
+    border-radius: var(--radius);
+    padding: 22px 20px;
+    margin-bottom: 16px;
+  }
+  header.hero h1 { margin: 0 0 4px; font-size: 26px; letter-spacing: .5px; }
+  header.hero .dates { opacity: .92; font-size: 16px; }
+  header.hero .sub { margin-top: 8px; font-size: 14px; opacity: .85; }
+
+  h2.section {
+    font-size: 20px;
+    margin: 26px 0 12px;
+    padding-left: 10px;
+    border-left: 5px solid var(--brand);
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 16px 16px 6px;
+    margin-bottom: 14px;
+  }
+
+  /* 總覽表 */
+  table.overview { width: 100%; border-collapse: collapse; font-size: 15px; }
+  table.overview th, table.overview td {
+    text-align: left; padding: 9px 8px; border-bottom: 1px solid var(--line); vertical-align: top;
+  }
+  table.overview th { background: var(--brand-soft); color: var(--brand); font-weight: 700; }
+  table.overview td.d { white-space: nowrap; font-weight: 700; color: var(--brand); }
+  table.overview a { color: var(--blue); text-decoration: none; }
+
+  /* 航班區 */
+  .flights { display: grid; gap: 10px; }
+  .flight {
+    background: var(--blue-soft);
+    border: 1px solid #c8ddf0;
+    border-radius: 12px;
+    padding: 12px 14px;
+    display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: baseline;
+  }
+  .flight .fdate { font-weight: 700; color: var(--blue); min-width: 58px; }
+  .flight .froute { font-weight: 700; }
+  .flight .fno { margin-left: auto; background: #fff; border: 1px solid #c8ddf0; border-radius: 8px; padding: 1px 8px; font-size: 14px; color: var(--blue); }
+  .flight .ftime { font-variant-numeric: tabular-nums; }
+
+  /* 待辦 */
+  ul.todo { list-style: none; padding: 0; margin: 6px 0 10px; }
+  ul.todo li {
+    background: var(--amber-soft);
+    border: 1px solid #eee0bd;
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    font-size: 15px;
+  }
+  ul.todo li b { color: var(--amber); }
+
+  /* 逐日 */
+  details.day {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    margin-bottom: 12px;
+    overflow: hidden;
+  }
+  details.day > summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 15px 16px;
+    font-size: 18px;
+    font-weight: 700;
+    background: #fff;
+    display: flex; align-items: center; gap: 10px;
+  }
+  details.day > summary::-webkit-details-marker { display: none; }
+  details.day > summary .dtag {
+    background: var(--brand); color: #fff; border-radius: 8px;
+    padding: 2px 10px; font-size: 14px; white-space: nowrap;
+  }
+  details.day > summary .dtitle { flex: 1; }
+  details.day > summary .chev { color: var(--sub); font-size: 14px; }
+  details.day[open] > summary { border-bottom: 1px solid var(--line); }
+  .daybody { padding: 6px 16px 14px; }
+
+  table.tl { width: 100%; border-collapse: collapse; font-size: 15px; margin: 8px 0; }
+  table.tl td { padding: 7px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  table.tl td.t { white-space: nowrap; font-weight: 700; color: var(--blue); width: 74px; font-variant-numeric: tabular-nums; }
+  table.tl a { color: var(--blue); text-decoration: none; }
+
+  .note { font-size: 14.5px; color: var(--sub); margin: 4px 0; padding-left: 4px; }
+  .note.warn { color: #8a4b00; }
+  .block-title { font-weight: 700; margin: 12px 0 4px; font-size: 15px; }
+
+  .pill { display: inline-block; border-radius: 999px; padding: 1px 9px; font-size: 13px; font-weight: 700; }
+  .pill.ok { background: var(--green-soft); color: var(--green); }
+  .pill.wait { background: var(--amber-soft); color: var(--amber); }
+  .pill.info { background: var(--blue-soft); color: var(--blue); }
+
+  .fly-in { background: var(--blue-soft); border-left: 4px solid var(--blue); padding: 8px 12px; border-radius: 8px; margin: 8px 0; font-size: 15px; }
+  .fly-in b { color: var(--blue); }
+
+  .opt { border: 1px dashed #d3b98f; background: #fffbf3; border-radius: 10px; padding: 10px 12px; margin: 8px 0; }
+  .opt h4 { margin: 0 0 4px; font-size: 15px; color: var(--amber); }
+  .opt ul { margin: 4px 0 0; padding-left: 20px; font-size: 14.5px; }
+
+  a.map { color: var(--blue); text-decoration: none; border-bottom: 1px dotted var(--blue); }
+
+  /* 路線規劃區 */
+  .route { margin: 12px 0 8px; background: #f2f7fb; border: 1px solid #cfe0ee; border-radius: 12px; padding: 12px 14px; }
+  .route .rcap { font-size: 13.5px; color: var(--sub); margin-bottom: 8px; }
+  .route .rstops { font-size: 15px; font-weight: 700; color: var(--ink); line-height: 1.9; }
+  .route .rstops .arrow { color: var(--blue); font-weight: 700; margin: 0 4px; }
+  .route .rstops .via { color: var(--sub); font-weight: 400; font-size: 13.5px; }
+  .route a.rbtn {
+    display: inline-block; margin-top: 10px;
+    background: var(--blue); color: #fff; text-decoration: none;
+    padding: 9px 16px; border-radius: 10px; font-size: 15px; font-weight: 700;
+  }
+  .route a.rbtn:active { background: #155a95; }
+
+  footer { text-align: center; color: var(--sub); font-size: 13px; padding: 20px 0 40px; }
+
+  @media (max-width: 480px) {
+    body { font-size: 16px; }
+    header.hero h1 { font-size: 22px; }
+    table.overview { font-size: 14px; }
+    table.tl td.t { width: 66px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <h1>🍁 加拿大行程</h1>
+    <div class="dates">2026 / 9 / 18（四）– 9 / 27（六）</div>
+    <div class="sub">卡加利 · 班夫 · 坎莫爾 · 路易斯湖 · 冰原大道 · 黃刀鎮追極光 · 溫哥華</div>
+  </header>
+
+  <!-- 航班重點 -->
+  <h2 class="section">✈️ 航班重點</h2>
+  <div class="card">
+    <div class="flights">
+      <div class="flight">
+        <span class="fdate">9/18</span>
+        <span class="froute">台灣 → 溫哥華</span>
+        <span class="ftime">23:30 → 19:15</span>
+        <span class="fno">EVA BR 010</span>
+      </div>
+      <div class="flight">
+        <span class="fdate">9/18</span>
+        <span class="froute">溫哥華 → 卡加利</span>
+        <span class="ftime">23:10 → 01:39<sup>+1</sup></span>
+        <span class="fno">AC 228</span>
+      </div>
+      <div class="flight">
+        <span class="fdate">9/23</span>
+        <span class="froute">卡加利 → 黃刀鎮</span>
+        <span class="ftime">11:10 → 13:25</span>
+        <span class="fno">WS 685</span>
+      </div>
+      <div class="flight">
+        <span class="fdate">9/26</span>
+        <span class="froute">黃刀鎮 → 溫哥華</span>
+        <span class="ftime">05:30 → 07:04</span>
+        <span class="fno">AC 253</span>
+      </div>
+      <div class="flight">
+        <span class="fdate">9/27</span>
+        <span class="froute">溫哥華 → 台灣</span>
+        <span class="ftime">02:00 → 05:20</span>
+        <span class="fno">EVA BR 009</span>
+      </div>
+    </div>
+    <p class="note warn">⚠️ 9/18 溫哥華轉機：兩段機票分開訂，行李不直掛。須在溫哥華入境 → 領行李 → 到 AC 國內線重新 check-in（22:10 前完成託運）。</p>
+    <p class="note warn">⚠️ 9/27 是凌晨 02:00 航班（實際上是 9/26 深夜報到）。</p>
+  </div>
+
+  <!-- 總覽 -->
+  <h2 class="section">🗓️ 行程總覽</h2>
+  <div class="card">
+    <table class="overview">
+      <tr><th>日期</th><th>行程重點</th><th>住宿</th></tr>
+      <tr><td class="d">9/18 五</td><td>台灣→溫哥華→卡加利</td><td>Wingate 機場飯店</td></tr>
+      <tr><td class="d">9/19 六</td><td>租車 + 卡加利遺產公園（鐵路日）→ 坎莫爾</td><td>Canmore Airbnb</td></tr>
+      <tr><td class="d">9/20 日</td><td>硫磺山纜車 + 班夫小鎮 + 城堡酒店</td><td>Canmore Airbnb</td></tr>
+      <tr><td class="d">9/21 一</td><td>夢蓮湖 + 路易斯湖 + 幽鶴國家公園</td><td>Canmore Airbnb</td></tr>
+      <tr><td class="d">9/22 二</td><td>哥倫比亞冰原（雪車 + 天空步道）</td><td>Canmore Airbnb</td></tr>
+      <tr><td class="d">9/23 三</td><td>還車 → 飛黃刀鎮 → 第 1 晚極光</td><td>Explorer Hotel</td></tr>
+      <tr><td class="d">9/24 四</td><td>市區輕鬆 / 補眠 → 第 2 晚極光</td><td>Explorer Hotel</td></tr>
+      <tr><td class="d">9/25 五</td><td>市區輕鬆 / 補眠 → 第 3 晚極光</td><td>Explorer Hotel</td></tr>
+      <tr><td class="d">9/26 六</td><td>飛溫哥華 + 逛 Outlet</td><td>✈️ 深夜航班</td></tr>
+      <tr><td class="d">9/27 日</td><td>溫哥華 → 台灣</td><td>—</td></tr>
+    </table>
+  </div>
+
+  <!-- 待辦 -->
+  <h2 class="section">✅ 待辦 / 待確認清單</h2>
+  <div class="card">
+    <ul class="todo">
+      <li><b>9/26 送機方案</b>：2 方案待跟導遊 / 飯店確認（帶行李追完直接送機 / 回飯店搭凌晨駁車）。詳見 9/26。</li>
+      <li><b>9/26 YVR 行李寄存</b>：務必落地後當面確認「最晚取件時間」能否涵蓋凌晨航班（9/26 深夜要取回）。</li>
+      <li><b>Heritage Park 門票</b>：建議線上先買，省現場排隊。</li>
+      <li><b>夢蓮湖 06:30 票</b>：全力搶；搶不到走 Fallback A（詳見 9/21）。</li>
+    </ul>
+  </div>
+
+  <!-- 逐日 -->
+  <h2 class="section">📖 逐日詳細</h2>
+
+  <!-- 9/18 -->
+  <details class="day">
+    <summary><span class="dtag">9/18 五</span><span class="dtitle">移動日：台灣 → 溫哥華 → 卡加利</span><span class="chev">▾</span></summary>
+    <div class="daybody">
+      <div class="fly-in"><b>BR 010</b> 台灣 23:30 → 溫哥華 19:15　｜　<b>AC 228</b> 溫哥華 23:10 → 卡加利 01:39<sup>+1</sup></div>
+      <div class="block-title">溫哥華轉機流程（4 小時，機票分開訂）</div>
+      <table class="tl">
+        <tr><td class="t">19:15</td><td>溫哥華落地，跟著入境（Arrivals）指標走</td></tr>
+        <tr><td class="t">—</td><td>過海關入境（eTA ✅ 已辦、備妥護照）</td></tr>
+        <tr><td class="t">—</td><td>提領 BR010 託運行李</td></tr>
+        <tr><td class="t">—</td><td>到 AC 國內線櫃檯重新 check-in + 託運（<b>22:10 前完成</b>）</td></tr>
+        <tr><td class="t">23:10</td><td>搭 AC 228 飛卡加利</td></tr>
+        <tr><td class="t">01:39</td><td>抵達卡加利，聯絡 Wingate 接駁（24H 接送）</td></tr>
+      </table>
+      <p class="note warn">⚠️ 轉機動作要俐落，別在免稅店久留。YVR 國際線與國內線同一航廈、走路可到。</p>
+      <p class="note">住宿：<a class="map" href="https://www.google.com/maps/search/?api=1&query=Wingate+by+Wyndham+Calgary+Airport">Wingate by Wyndham Calgary Airport</a>（凌晨落地後用機場電話聯絡接駁）</p>
+    </div>
+  </details>
+
+  <!-- 9/19 -->
+  <details class="day">
+    <summary><span class="dtag">9/19 六</span><span class="dtitle">卡加利 → 坎莫爾（遺產公園鐵路日）</span><span class="chev">▾</span></summary>
+    <div class="daybody">
+      <p class="note">節奏：前一晚凌晨才睡，早上睡飽再出發，不趕早。</p>
+      <div class="route">
+        <div class="rcap">🗺️ 當日路線規劃（點按鈕在 Google Maps 開啟）</div>
+        <div class="rstops">Wingate 飯店 <span class="arrow">→</span> 卡加利機場（取車）<span class="arrow">→</span> Heritage Park <span class="arrow">→</span> Wingate 飯店（拿行李）<span class="arrow">→</span> 坎莫爾</div>
+        <a class="rbtn" href="https://maps.app.goo.gl/4qZfRoeb9BZWFpn46">開啟路線</a>
+      </div>
+      <table class="tl">
+        <tr><td class="t">~09:00</td><td>起床、早餐、退房（行李暫留 <a class="map" href="https://www.google.com/maps/search/?api=1&query=Wingate+by+Wyndham+Calgary+Airport">Wingate By Wyndham Calgary Airport</a> 寄放 — 治安考量不留車上）</td></tr>
+        <tr><td class="t">~09:30</td><td>Wingate 接駁到機場 → <b>機場租車公司取車</b>（確認 GPS / 保險 / 加油政策）</td></tr>
+        <tr><td class="t">~10:15</td><td>開往 <a class="map" href="https://www.google.com/maps/search/?api=1&query=Heritage+Park+Historical+Village+Calgary">Heritage Park Historical Village</a>（約 30–40 分）</td></tr>
+        <tr><td class="t">10:30</td><td><b>卡加利遺產公園．鐵路日</b>（開門 10:00，玩約 3.5 小時，含園內午餐）</td></tr>
+        <tr><td class="t">~14:00</td><td>回 Wingate 拿寄放行李</td></tr>
+        <tr><td class="t">~14:45</td><td>行李上車 → 出發往坎莫爾（走 Hwy 1，約 1.5 小時）</td></tr>
+        <tr><td class="t">~16:15</td><td>抵達 Canmore Airbnb（地址待補）check-in，晚餐休息</td></tr>
+      </table>
+      <div class="block-title">鐵路日 Railway Days <span class="pill info">40 週年</span></div>
+      <p class="note">🕙 10:00–17:00｜📍 1900 Heritage Dr. S.W.｜票價（+5% GST）：成人 $39.95 / 長者 $31.95 / 兒童 $27.95</p>
+      <p class="note">🅿️ 停車付費（前 90 分免費），Park Plus 分區 <b>8320</b>（停超過 90 分記得繳費）</p>
+      <p class="note">必看：1907 轉車盤演示、雙機聯掛蒸汽火車、手搖軌道車、守車搭乘（Town Hall 購票、Laggan Station 上車）</p>
+      <p class="note warn">⬜ 建議線上先買門票。⬜ Canmore Airbnb 地址待補。</p>
+    </div>
+  </details>
+
+  <!-- 9/20 -->
+  <details class="day">
+    <summary><span class="dtag">9/20 日</span><span class="dtitle">班夫：硫磺山纜車 + 小鎮 + 城堡</span><span class="chev">▾</span></summary>
+    <div class="daybody">
+      <p class="note">重點：纜車 <span class="pill ok">10:30 已訂</span> 自駕直上；下午光線好時逛班夫大道 + 時光花園拍照；朱砂湖收黃昏。</p>
+      <div class="route">
+        <div class="rcap">🗺️ 當日路線規劃（點按鈕在 Google Maps 開啟）</div>
+        <div class="rstops">坎莫爾 <span class="arrow">→</span> 硫磺山纜車 <span class="arrow">→</span> 班夫大道／時光花園 <span class="arrow">→</span> 驚奇角 <span class="arrow">→</span> 城堡酒店 <span class="arrow">→</span> 朱砂湖 <span class="arrow">→</span> 坎莫爾</div>
+        <a class="rbtn" href="https://maps.app.goo.gl/vuqG8KzJQdbYBJWr7">開啟路線</a>
+      </div>
+      <table class="tl">
+        <tr><td class="t">~09:45</td><td>坎莫爾出發 → <a class="map" href="https://www.google.com/maps/search/?api=1&query=Banff+Gondola">硫磺山纜車站</a>（約 30 分，含停車）</td></tr>
+        <tr><td class="t">10:30</td><td><b>硫磺山纜車</b>上山：六大山脈景觀、2km 木棧道走到 Sanson's Peak、解說中心</td></tr>
+        <tr><td class="t">午餐</td><td>山頂 Castle Mountain Coffee 快取輕食（免預約）／或預約 Sky Bistro</td></tr>
+        <tr><td class="t">~13:00</td><td>下山 → <a class="map" href="https://www.google.com/maps/search/?api=1&query=Cascade+of+Time+Garden+Banff">時光花園瀑布</a> 附近停車（你提到有免費停車）</td></tr>
+        <tr><td class="t">~13:30</td><td><b>時光花園 + 班夫小鎮拍照</b>（白天光線好）</td></tr>
+        <tr><td class="t">~14:30</td><td>逛 <a class="map" href="https://www.google.com/maps/search/?api=1&query=Banff+Avenue">班夫大道</a>、午茶點心</td></tr>
+        <tr><td class="t">~15:30</td><td><a class="map" href="https://www.google.com/maps/search/?api=1&query=Surprise+Corner+Banff">驚奇角 Surprise Corner</a> 眺望城堡（下午偏逆光，可接受）</td></tr>
+        <tr><td class="t">~16:00</td><td><a class="map" href="https://www.google.com/maps/search/?api=1&query=Fairmont+Banff+Springs">班夫溫泉城堡酒店</a>：遠眺 + 逛大廳，有機會喝下午茶</td></tr>
+        <tr><td class="t">~17:45</td><td><a class="map" href="https://www.google.com/maps/search/?api=1&query=Vermilion+Lakes+Banff">朱砂湖 Vermilion Lakes</a> 黃昏倒影（optional）</td></tr>
+        <tr><td class="t">~18:45</td><td>回坎莫爾晚餐 / 休息</td></tr>
+      </table>
+      <p class="note">🍽️ 山頂餐飲：Castle Mountain Coffee（免預約 grab-and-go）、Northern Lights 自助餐（可現場排）、Sky Bistro（需預約）、山下 Starbucks（全加最高海拔）。</p>
+      <p class="note warn">⬜ 決定山頂午餐是否訂 Sky Bistro（週六建議先訂位）。</p>
+      <p class="note">📌 驚奇角在班夫東北邊、不在往纜車路上，故安排在下午同一區（驚奇角↔城堡酒店相鄰）。</p>
+    </div>
+  </details>
+
+  <!-- 9/21 -->
+  <details class="day">
+    <summary><span class="dtag">9/21 一</span><span class="dtitle">夢蓮湖 + 路易斯湖 + 幽鶴國家公園</span><span class="chev">▾</span></summary>
+    <div class="daybody">
+      <p class="note warn">⏰ 全程最早起的一天。約 05:00 出發，坎莫爾 → Lake Louise Park &amp; Ride 約 50 分。</p>
+      <div class="route">
+        <div class="rcap">🗺️ 當日路線（兩湖禁自駕進入，只能開到 Park &amp; Ride 轉官方接駁；幽鶴可自駕）</div>
+        <div class="rstops">坎莫爾 <span class="arrow">→</span> Lake Louise Park &amp; Ride <span class="via">（接駁：路易斯湖 ⇄ 夢蓮湖）</span> <span class="arrow">→</span> 幽鶴／翡翠湖 <span class="arrow">→</span> 坎莫爾</div>
+        <a class="rbtn" href="https://maps.app.goo.gl/dLawNuicLJEfX4Za6">開啟路線</a>
+      </div>
+
+      <div class="block-title">接駁重點（Parks Canada 官方，一張票含兩湖 + Lake Connector + 來回 Park &amp; Ride）</div>
+      <p class="note">🅿️ 自駕停 <a class="map" href="https://www.google.com/maps/search/?api=1&query=Lake+Louise+Park+and+Ride">Lake Louise Park &amp; Ride</a>（免費），在 kiosk check-in 拿 boarding pass。</p>
+      <p class="note">路易斯湖線 / 夢蓮湖線：06:30–17:00，每 30 分｜<b>Lake Connector（兩湖串接）：07:00–18:00</b>，每 30 分、先到先上、免選時段。</p>
+
+      <div class="block-title">最佳走法（若搶到夢蓮湖 06:30 票）</div>
+      <table class="tl">
+        <tr><td class="t">~05:00</td><td>坎莫爾出發（帶足水 / 保暖）</td></tr>
+        <tr><td class="t">~05:50</td><td>Park &amp; Ride check-in</td></tr>
+        <tr><td class="t">06:30</td><td>搭夢蓮湖線 → <a class="map" href="https://www.google.com/maps/search/?api=1&query=Moraine+Lake">夢蓮湖</a>（清晨十峰倒影、人最少）</td></tr>
+        <tr><td class="t">~07:30</td><td>搭 Lake Connector → <a class="map" href="https://www.google.com/maps/search/?api=1&query=Lake+Louise">路易斯湖</a></td></tr>
+        <tr><td class="t">上午</td><td>路易斯湖畔散步、拍照</td></tr>
+        <tr><td class="t">13:45</td><td><b>Lakeview Lounge 午餐</b> <span class="pill wait">暫 2 位</span>（或附近小店 / 現場排隊）</td></tr>
+        <tr><td class="t">下午</td><td>往西去幽鶴國家公園（ <a class="map" href="https://maps.app.goo.gl/6oECfXaL7ZKzLcXv7">天然石橋</a> + <a class="map" href="https://maps.app.goo.gl/MA9AUWDMt1iqyUR3A">翡翠湖</a>）</td></tr>
+        <tr><td class="t">晚上</td><td>班夫 / 坎莫爾晚餐（代訂，自由）→ 回坎莫爾</td></tr>
+      </table>
+
+      <div class="opt">
+        <h4>Fallback A（搶不到夢蓮湖 06:30 票時）</h4>
+        <ul>
+          <li>06:30 搭路易斯湖線到路易斯湖（先拍 20–30 分）</li>
+          <li>07:00 起搭 Lake Connector 去夢蓮湖（不用回 Park &amp; Ride）</li>
+          <li>回路易斯湖 → 上午玩 → 13:45 午餐 → 幽鶴</li>
+          <li>優點：午餐綁路易斯湖，最後自然回到路易斯湖，不折返。</li>
+        </ul>
+      </div>
+
+      <p class="note warn">⚠️ 夢蓮湖是無訊號 backcountry：無手機訊號 / Wi-Fi / 自來水，只有旱廁。下山約 5km 才有訊號。清晨去帶足水、保暖、事先想好接駁。</p>
+    </div>
+  </details>
+
+  <!-- 9/22 -->
+  <details class="day">
+    <summary><span class="dtag">9/22 二</span><span class="dtitle">哥倫比亞冰原（雪車 + 天空步道）</span><span class="chev">▾</span></summary>
+    <div class="daybody">
+      <p class="note">重點：早起直衝冰原趕 <span class="pill ok">11:30 已訂套票</span>；不去賈斯珀；回程沿冰原大道停經典景點。</p>
+      <div class="route">
+        <div class="rcap">🗺️ 當日路線（去程直衝冰原，回程順路南下停景點）</div>
+        <div class="rstops">坎莫爾 <span class="arrow">→</span> 哥倫比亞冰原 <span class="via">（回程停）</span> <span class="arrow">→</span> 佩托湖 <span class="arrow">→</span> 弓湖 <span class="arrow">→</span> Mistaya Canyon <span class="arrow">→</span> 坎莫爾</div>
+        <a class="rbtn" href="https://maps.app.goo.gl/3Yxw3zhYhdE71DYh8">開啟路線</a>
+      </div>
+      <table class="tl">
+        <tr><td class="t">~07:30</td><td>坎莫爾出發（<b>出發前加滿油</b>）→ 沿冰原大道 Hwy 93 北上</td></tr>
+        <tr><td class="t">~11:00</td><td>抵達 <a class="map" href="https://www.google.com/maps/search/?api=1&query=Columbia+Icefield+Discovery+Centre">Columbia Icefield Discovery Centre</a>（提早報到）</td></tr>
+        <tr><td class="t">11:30</td><td><b>冰原雪車 Ice Explorer + 天空步道 Skywalk</b>（約 3 小時）</td></tr>
+        <tr><td class="t">~14:30</td><td>活動結束，Discovery Centre 簡單午餐</td></tr>
+        <tr><td class="t">~15:00</td><td>南返，回程沿途停景點</td></tr>
+        <tr><td class="t">回程</td><td><a class="map" href="https://maps.app.goo.gl/XVvwx48NP8o9D43GA">辛華達瀑布
+ Sunwapta Falls</a>、<a class="map" href="https://maps.app.goo.gl/6mXSeWo8RifhQzjM9">阿薩巴斯卡瀑布 Athabasca Falls</a>、<a class="map" href="https://www.google.com/maps/search/?api=1&query=Peyto+Lake">佩托湖 Peyto Lake</a>、<a class="map" href="https://www.google.com/maps/search/?api=1&query=Bow+Lake+Banff">弓湖 Bow Lake</a></td></tr>
+        <tr><td class="t">~18:30</td><td>回坎莫爾晚餐（視停幾個點而定）</td></tr>
+      </table>
+      <p class="note warn">⛽ 出發前在坎莫爾 / 班夫加滿油——冰原大道中途只有 Saskatchewan River Crossing 一個小油站且貴。</p>
+      <p class="note warn">📵 手機訊號差，導航、票券截圖先離線備好。🧥 冰川上冷、風大，保暖 + 防滑鞋。</p>
+    </div>
+  </details>
+
+  <!-- 9/23 -->
+  <details class="day">
+    <summary><span class="dtag">9/23 三</span><span class="dtitle">還車 → 飛黃刀鎮 → 第 1 晚極光</span><span class="chev">▾</span></summary>
+    <div class="daybody">
+      <div class="fly-in"><b>WS 685</b> 卡加利 11:10 → 黃刀鎮 13:25</div>
+      <div class="route">
+        <div class="rcap">🗺️ 陸路路線（坎莫爾 → 卡加利機場還車；之後 WS685 飛黃刀鎮）</div>
+        <div class="rstops">坎莫爾 <span class="arrow">→</span> 卡加利機場（還車）<span class="via">✈ 飛黃刀鎮</span></div>
+        <a class="rbtn" href="https://www.google.com/maps/dir/Canmore,+AB/Calgary+International+Airport">開啟路線</a>
+      </div>
+      <table class="tl">
+        <tr><td class="t">~06:30</td><td>坎莫爾出發（<b>還車前加滿油</b>）</td></tr>
+        <tr><td class="t">~08:15</td><td>卡加利機場還車（留驗車 + 走到航廈緩衝）</td></tr>
+        <tr><td class="t">~09:00</td><td>WS 685 完成 check-in、託運、安檢（起飛前 2 小時）</td></tr>
+        <tr><td class="t">11:10</td><td>起飛 → 13:25 抵達黃刀鎮</td></tr>
+        <tr><td class="t">13:25</td><td>出口找導遊舉牌接機（團含 24H 接機）</td></tr>
+        <tr><td class="t">下午</td><td><a class="map" href="https://www.google.com/maps/search/?api=1&query=Explorer+Hotel+Yellowknife">Explorer Hotel</a> check-in、採買、<b>補眠</b></td></tr>
+        <tr><td class="t">晚上</td><td><b>第 1 晚追極光</b>：Aurora Lodge 營地 + 巴士追光（導遊飯店大廳集合接送）</td></tr>
+      </table>
+      <p class="note">🧭 黃刀團：星辰之旅 Morning Star Travel｜含 24H 接機、中文導遊、免費極光攝影原圖、馴鹿主題營地（無限熱飲小吃、恆溫 25°C）+ 巴士追光。</p>
+      <p class="note warn">💵 司導服務費不含：4 天 3 夜 <b>每人 CA$35</b>（現場付）。團為純享極光、不含自費、零購物。</p>
+      <p class="note">😴 白天務必補眠，追極光是深夜到凌晨（約 22:00–02:00）。</p>
+    </div>
+  </details>
+
+  <!-- 9/24 -->
+  <details class="day">
+    <summary><span class="dtag">9/24 四</span><span class="dtitle">黃刀鎮：市區輕鬆 / 補眠 → 第 2 晚極光</span><span class="chev">▾</span></summary>
+    <div class="daybody">
+      <p class="note">定調：白天睡到自然醒、補眠；午後輕鬆逛市區；晚上養足精神追極光。（刻意的體力管理，三晚熬夜不硬排活動。）</p>
+      <table class="tl">
+        <tr><td class="t">白天</td><td>睡到自然醒、補眠</td></tr>
+        <tr><td class="t">午後</td><td>市區導覽（團附贈，擇一天）：飛行員紀念碑、歡迎碑、遊客中心（<b>領證書 + 小刀</b>）、Ndilo、老城區</td></tr>
+        <tr><td class="t">自由</td><td><a class="map" href="https://www.google.com/maps/search/?api=1&query=Frame+Lake+Trail+Yellowknife">Frame Lake 湖畔步道</a>、<a class="map" href="https://www.google.com/maps/search/?api=1&query=Prince+of+Wales+Northern+Heritage+Centre">博物館 + 旗幟走廊</a>、鑽石中心、<a class="map" href="https://www.google.com/maps/search/?api=1&query=Bush+Pilots+Monument+Yellowknife">Old Town 登高點</a></td></tr>
+        <tr><td class="t">傍晚</td><td>回飯店補眠、養精神</td></tr>
+        <tr><td class="t">晚上</td><td><b>第 2 晚追極光</b>（營地 + 追光）</td></tr>
+      </table>
+      <p class="note">🍽️ 推薦美食：<a class="map" href="https://www.google.com/maps/search/?api=1&query=Bullocks+Bistro+Yellowknife">Bullock's Bistro</a>（魚、野牛肉排）、Gold Range（酸辣湯、春捲）、Sushi Cafe（蝦炒飯）、Century Square Mall 皮草小舖。</p>
+      <p class="note">📌 金馬倫瀑布健行、ATV 越野：以你們「休息為主」取向，CP 值不高，可略過。</p>
+    </div>
+  </details>
+
+  <!-- 9/25 -->
+  <details class="day">
+    <summary><span class="dtag">9/25 五</span><span class="dtitle">黃刀鎮：市區輕鬆 / 補眠 → 第 3 晚極光（最後一晚）</span><span class="chev">▾</span></summary>
+    <div class="daybody">
+      <table class="tl">
+        <tr><td class="t">白天</td><td>睡到自然醒、補眠</td></tr>
+        <tr><td class="t">午後</td><td>逛沒去到的市區點 + 採買紀念品（若市區導覽排在今天則跟團走）</td></tr>
+        <tr><td class="t">傍晚</td><td><b>若走 9/26 選項 1：</b>白天先整理行李、check-out 準備帶行李</td></tr>
+        <tr><td class="t">晚上</td><td><b>第 3 晚追極光（最後一晚）</b>→ 視 9/26 送機方案決定是否追完直接送機</td></tr>
+      </table>
+      <p class="note warn">⚠️ 9/25 晚與 9/26 送機方案連動（見 9/26）。若選「追完直接送機」，今晚追完極光後直接去機場趕 05:30 班機。</p>
+    </div>
+  </details>
+
+  <!-- 9/26 -->
+  <details class="day">
+    <summary><span class="dtag">9/26 六</span><span class="dtitle">飛溫哥華 + 逛 Outlet</span><span class="chev">▾</span></summary>
+    <div class="daybody">
+      <div class="fly-in"><b>AC 253</b> 黃刀鎮 05:30 → 溫哥華 07:04</div>
+
+      <div class="block-title">凌晨送機（2 方案，待確認）</div>
+      <div class="opt">
+        <h4>選項 1（推薦）：帶行李追 9/25 晚極光，追完導遊直接送機</h4>
+        <ul>
+          <li>白天整理行李 → 晚上帶行李上團車 → 追到 02:00–03:00 → 導遊直接送機 → 04:00 到機場</li>
+          <li>極光追滿、導遊送機省事；行李需在營地木屋放一晚</li>
+          <li>⚠️ 事先跟星辰之旅導遊敲定「送機能配合 05:30 航班」，提前提供回程航班資訊</li>
+        </ul>
+      </div>
+      <div class="opt">
+        <h4>選項 2：追完回飯店，凌晨搭 Explorer Hotel 駁車去機場</h4>
+        <ul>
+          <li>約 02:00 回飯店 → 梳洗 / 瞇一下 → 搭飯店凌晨駁車去機場（機場僅 10–15 分）</li>
+          <li>行李放房間較安心；但極光可能要提早離場</li>
+          <li>⚠️ 須先跟 Explorer Hotel 確認凌晨駁車發車時間 / 是否需預約，能配合 03:30–04:00</li>
+        </ul>
+      </div>
+
+      <div class="block-title">溫哥華白天：就近逛為主</div>
+      <table class="tl">
+        <tr><td class="t">~07:30</td><td>落地 YVR，<b>先到行李寄存櫃檯確認收費 + 最晚取件時間</b></td></tr>
+        <tr><td class="t">~08:30</td><td>搭 Canada Line 到 <a class="map" href="https://www.google.com/maps/search/?api=1&query=Gastown+Vancouver">Gastown 蒸汽鐘</a></td></tr>
+        <tr><td class="t"></td><td>搭 Canada Line 回到 <a class="map" href="https://www.google.com/maps/search/?api=1&query=McArthurGlen+Designer+Outlet+Vancouver">McArthurGlen Designer Outlet</a>（機場旁 Templeton 站）</td></tr>
+        <tr><td class="t">傍晚</td><td>晚餐、回機場方向</td></tr>
+        <tr><td class="t">~23:00</td><td>取回寄存行李、EVA check-in（起飛前約 2–3 小時）</td></tr>
+      </table>
+
+      <p class="note warn">⚠️ YVR 無傳統投幣置物櫃，為人工行李寄存服務。因你是凌晨航班，<b>務必確認最晚取件時間</b>，否則深夜可能拿不回行李。</p>
+    </div>
+  </details>
+
+  <!-- 9/27 -->
+  <details class="day">
+    <summary><span class="dtag">9/27 日</span><span class="dtitle">溫哥華 → 台灣</span><span class="chev">▾</span></summary>
+    <div class="daybody">
+      <div class="fly-in"><b>EVA BR 009</b> 溫哥華 02:00 → 台灣 05:20</div>
+      <p class="note">凌晨航班，實際上是 9/26 深夜報到。取回寄存行李後 check-in、過安檢、登機。</p>
+      <p class="note">🛬 抵達台灣 05:20，回家補眠。</p>
+    </div>
+  </details>
+
+  <footer>
+    加拿大行程 · 2026/9/18–9/27 ·（可離線開啟，點景點連結可開地圖導航）
+  </footer>
+
+</div>
+</body>
+</html>
